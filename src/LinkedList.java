@@ -13,9 +13,9 @@ public class LinkedList<E> {
      * Node class for the LinkedList
      * Contains data and a reference to the next node
      */
-    private class Node {
+    private class Node<E> {
         private E data;         // Data stored in this node
-        private Node next;      // Reference to the next node in the list
+        private Node<E> next;      // Reference to the next node in the list
         
         
         /**
@@ -38,7 +38,8 @@ public class LinkedList<E> {
     }
     
     // Instance variables for the LinkedList
-    private Node head;  // Reference to the first node in the list
+    private Node<E> head;  // Reference to the first node in the list
+    private Node<E> last;  // Reference to the last node in the list
     private int size;   // Number of elements in the list
     
     /**
@@ -47,6 +48,8 @@ public class LinkedList<E> {
      */
     public LinkedList() {
         this.size = 0;
+        this.head = null;
+        this.last = null;
     }
     
     /**
@@ -64,7 +67,7 @@ public class LinkedList<E> {
      */
     public boolean isEmpty() {
         // Implement this method
-        if(size>0){
+        if(size ==0){
             return true;
         }
         return false; // Placeholder return value
@@ -80,7 +83,7 @@ public class LinkedList<E> {
         if(isEmpty()==true){
             throw new NoSuchElementException("List is empty");
         }
-        return (E) head.data; // Placeholder return value
+        return head.data; // Placeholder return value
     }
     
     /**
@@ -90,7 +93,11 @@ public class LinkedList<E> {
      */
     public E getLast() {
         // Implement this method
-        return null; // Placeholder return value
+        if(isEmpty()==true){
+            throw new NoSuchElementException("List is empty");
+        }
+         
+        return last.data; 
     }
     
     /**
@@ -98,7 +105,12 @@ public class LinkedList<E> {
      * @param element The element to add
      */
     public void addFirst(E element) {
-        // Implement this method
+        Node <E> newNode = new Node(element, head);
+        head = newNode;
+        if(isEmpty()){
+            last= newNode;
+        }
+        size++;
     }
     
     /**
@@ -106,17 +118,34 @@ public class LinkedList<E> {
      * @param element The element to add
      */
     public void addLast(E element) {
-        // Implement this method
+        Node<E> newNode = new Node<>(element);
+        if (isEmpty()) {
+            head = newNode;
+            last = newNode;
+        } else {
+            last.next = newNode;
+            last = newNode;
+        }
+        size++;
     }
-    
+     
     /**
      * Removes and returns the first element in the list
      * @return The first element in the list
-     * @throws NoSuchElementException if the list is empty
+     * @throws NoSuchElementException if the list is  empty
      */
     public E removeFirst() {
         // Implement this method
-        return null; // Placeholder return value
+        if(isEmpty()==true){
+            throw new NoSuchElementException("List is empty");
+        }
+        Node<E> tempNode = head;
+        this.head = this.head.next;
+        if(head == null){
+            last = null;
+        }
+        size--;
+        return tempNode.data; // Placeholder return value
     }
     
     /**
@@ -125,9 +154,23 @@ public class LinkedList<E> {
      * @throws NoSuchElementException if the list is empty
      */
     public E removeLast() {
-        // Implement this method
-        return null; // Placeholder return value
+        if (isEmpty()) {
+            throw new NoSuchElementException("List is empty");
+        }
+        if (size == 1) {
+            return removeFirst();
+        }
+        Node<E> current = head;
+        while (current.next != last) {
+            current = current.next;
+        }
+        E data = last.data;
+        last = current;
+        last.next = null;
+        size--;
+        return data;
     }
+    
     
     /**
      * Adds an element at the specified index
@@ -136,9 +179,25 @@ public class LinkedList<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public void add(int index, E element) {
-        // Implement this method
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        if (index == 0) {
+            addFirst(element);
+            return;
+        }
+        if (index == size) {
+            addLast(element);
+            return;
+        }
+        Node<E> current = head;
+        for (int i = 1; i < index; i++) {
+            current = current.next;
+        }
+        Node<E> newNode = new Node<>(element, current.next);
+        current.next = newNode;
+        size++;
     }
-    
     /**
      * Returns the element at the specified index without removing it
      * @param index The index of the element to return
@@ -146,8 +205,20 @@ public class LinkedList<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public E get(int index) {
-        // Implement this method
-        return null; // Placeholder return value
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        
+        Node <E> tempNode = head;
+        int i = 0;
+        while(i != index){
+            tempNode = tempNode.next;
+            i++;
+        }
+        if(tempNode == null){
+            return null;
+        }
+        return tempNode.data; // Placeholder return value
     }
     
     /**
@@ -157,8 +228,23 @@ public class LinkedList<E> {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public E remove(int index) {
-        // Implement this method
-        return null; // Placeholder return value
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index is out of bounds");
+        }
+        if (index == 0) {
+            return removeFirst();
+        }
+        if (index == size - 1) {
+            return removeLast();
+        }
+        Node <E> current = head;
+        for (int i = 1; i < index; i++) {
+            current = current.next;
+        }
+        Node <E> tempNode = current.next;
+        current.next = tempNode.next;
+        size--;
+        return tempNode.data;
     }
     
     /**
@@ -167,7 +253,16 @@ public class LinkedList<E> {
      * @return The index of the first occurrence of the element, or -1 if not found
      */
     public int indexOf(E element) {
-        // Implement this method
+        Node <E> current = head;
+        for(int i = 0;i < size; i++ ){
+            if(current.data == null && element == null){
+                return i;
+            }
+            if(current.data == element){
+                return i;
+            }
+            current = current.next;
+        }
         return -1; // Placeholder return value
     }
     
@@ -177,7 +272,16 @@ public class LinkedList<E> {
      * @return true if the list contains the element, false otherwise
      */
     public boolean contains(E element) {
-        // Implement this method
+        Node <E> current = head;
+        for(int i = 0; i < size; i++){
+            if(current.data == null && element == null){
+                return true;
+            }
+            if(current.data == element){
+                return true;
+            }
+            current = current.next;
+        }
         return false; // Placeholder return value
     }
     
@@ -187,21 +291,39 @@ public class LinkedList<E> {
      */
     @Override
     public String toString() {
-        // Implement this method
-        return ""; // Placeholder return value
+        StringBuilder sb = new StringBuilder();
+        Node <E> current = head;
+        sb.append("[");
+        while (current != null) {
+            sb.append(current.data);
+            if (current.next != null) {
+                sb.append(", ");
+            }
+            current = current.next;
+        }
+        sb.append("]");
+        return sb.toString();
     }
     
     /**
      * Clears the list, removing all elements
      */
     public void clear() {
-        // Implement this method
+        head = null;
+        size = 0;
     }
     
     /**
      * Extra challenge: Reverses the list in place
      */
     public void reverse() {
-        // Implement this method (optional challenge)
+        String s = toString(); 
+        String reverse = "";
+        char ch;
+
+        for (int i = s.length()-1; i >= 0; i--) {
+            ch = s.charAt(i);
+            reverse = ch + reverse; 
+        }
     }
 }
