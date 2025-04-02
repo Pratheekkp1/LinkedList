@@ -1,18 +1,41 @@
-## Getting Started
+# LinkedList, Stack, and Queue Implementation
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This project contains implementations of fundamental data structures: LinkedList, Stack, and Queue. It includes extensive test drivers to validate the functionality of these data structures.
+
+## Project Structure
+
+- **LinkedList**: A custom implementation of a singly linked list with methods for adding, removing, and accessing elements.
+- **Stack**: A stack implementation built on top of the LinkedList class, supporting typical stack operations like `push`, `pop`, and `peek`.
+- **Queue**: A queue implementation built on top of the LinkedList class, supporting typical queue operations like `push`, `pop`, and `peek`.
 
 ## Folder Structure
 
-The workspace contains two folders by default, where:
+- `src`: Contains the source code for the data structures and their test drivers.
+- `lib`: Placeholder for external dependencies (if any).
+- `bin`: Compiled output files (generated automatically).
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Running the Tests
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+1. Open the project in your preferred Java IDE (e.g., Visual Studio Code, IntelliJ IDEA, or Eclipse).
+2. Compile the project to ensure all dependencies are resolved.
+3. Run the following test drivers to validate the implementations:
+   - `LinkedListTester`: Tests all methods of the `LinkedList` class.
+   - `StackDriver`: Tests all methods of the `Stack` class.
+   - `QueueDriver`: Tests all methods of the `Queue` class.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Efficiency Testing
 
-## Dependency Management
+The `StackDriver` and `QueueDriver` classes include efficiency tests for adding and removing 1 million elements. These tests demonstrate the performance of the data structures under heavy workloads.
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Customization
+
+If you want to modify the folder structure or settings:
+- Open `.vscode/settings.json` and update the related settings.
+
+## Contribution
+
+Feel free to contribute by adding new features, optimizing existing code, or improving test coverage.
+
+## License
+
+This project is for educational purposes and does not include a specific license.
